@@ -18,7 +18,7 @@ class JokesController < ApplicationController
   # {
   #     "joke": {
   #       "category": "foo",
-  #       "joke": "foobarbaz123"
+  #       "content": "foobarbaz123"
   #     }
   # }
   #
@@ -26,6 +26,6 @@ class JokesController < ApplicationController
   # but it doesn't make them mandatory.
   # By doing this we are using what's known as string parameters.
   def joke_params
-    params.require(:joke).permit(:category, :joke)
+    params.require(:joke).permit(:category, :content)
   end
 end

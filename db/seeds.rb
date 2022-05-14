@@ -9,5 +9,5 @@ data_hash = JSON.parse(file).deep_symbolize_keys
 
 # Create Jokes into the database
 data_hash[:jokes].each do |joke|
-  Joke.create!(category: joke[:category], joke: joke[:joke])
+  Joke.create!(category: joke[:category], content: joke[:joke])
 end

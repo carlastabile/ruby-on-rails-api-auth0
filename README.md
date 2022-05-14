@@ -1,24 +1,14 @@
-# README
+# Ruby on Rails API integration with Auth0 
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This Ruby on Rails API integrates with Auth0 to build demonstrate how to build secure endpoints. 
 
-Things you may want to cover:
+## Pre-requisites
+- RVM 
+- Ruby 3.1.2 
+- Rails 7.0.3
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## How was this repo built?
+1. `rails new . -T --api`
+2. `rails generate model Joke category:string content:string`
+3. `rails db:create db:migrate db:seed`
+4. `rails g controller Jokes index create`
