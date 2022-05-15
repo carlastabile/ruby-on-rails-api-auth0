@@ -12,3 +12,8 @@ This Ruby on Rails API integrates with Auth0 to build demonstrate how to build s
 2. `rails generate model Joke category:string content:string`
 3. `rails db:create db:migrate db:seed`
 4. `rails g controller Jokes index create`
+
+## Run with Docker 
+1. `docker-compose build`
+2. `docker-compose run app rails db:migrate db:seed`
+3. `docker-compose up`
