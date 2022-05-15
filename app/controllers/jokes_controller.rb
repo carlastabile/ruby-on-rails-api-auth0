@@ -1,4 +1,6 @@
 class JokesController < ApplicationController
+  before_action :authenticate_request!, only: [:create]
+
   def index
     render json: Joke.all
   end
