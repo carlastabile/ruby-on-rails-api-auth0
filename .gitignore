@@ -33,3 +33,4 @@
 /config/master.key
 
 /blog_images
+.env
