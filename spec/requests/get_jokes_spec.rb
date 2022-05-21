@@ -7,7 +7,7 @@ RSpec.describe 'Jokes', type: :request do
       get '/jokes'
     end
     
-    it 'returns all posts' do
+    it 'returns all jokes' do
       expect(json.size).to eq(10)
     end
 

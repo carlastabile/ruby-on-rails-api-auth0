@@ -12,7 +12,6 @@ RSpec.describe 'Jokes', type: :request do
   }
   describe 'POST /jokes' do
     it 'returns error if there is no token' do
-      # request.headers["Authorization"] = "foo"
 
       post '/jokes', params: { joke: { category: "funny", content: "yes" } }
                       
