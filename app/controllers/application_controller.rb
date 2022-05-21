@@ -9,11 +9,6 @@ class ApplicationController < ActionController::API
   end
 
   private
-  def token_available?
-    token = Rails.cache.read(:token)
-    token ? token : TokenService.get
-  end
-
   def http_token
     if request.headers['Authorization'].present?
       request.headers['Authorization'].split(' ').last
