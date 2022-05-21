@@ -6,4 +6,5 @@ ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install
 RUN rails db:create db:migrate db:seed
+RUN rails RAILS_ENV=test db:create db:migrate
 ADD . /app 
