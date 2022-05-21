@@ -5,10 +5,11 @@ require 'json_web_token'
 describe JsonWebToken do
   subject { described_class }
 
-  let(:token){ TokenHelper.read_token("expiredToken")}
+  let(:valid_token){ TokenHelper.read_token("validToken")}
+  let(:expired_token){ TokenHelper.read_token("expiredToken")}
 
   let(:jwks_raw) do
-    "{\"keys\":[{\"alg\":\"RS256\",\"kty\":\"RSA\",\"use\":\"sig\",\"x5c\":[\"MIIDATCCAemgAwIBAgIJUehs79ahslK3MA0GCSqGSIb3DQEBCwUAMB4xHDAaBgNVBAMTE2hjZXJpcy5ldS5hdXRoMC5jb20wHhcNMTkwNDE2MTkwNzQ3WhcNMzIxMjIzMTkwNzQ3WjAeMRwwGgYDVQQDExNoY2VyaXMuZXUuYXV0aDAuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAso5viNLtITh86OESO6njyqbtf+iPBEcQNmWohKEKMSDTeeWxJP15mWDUPB+EAKTakudsJ/Rs/MiTiEHOJubJ6BVMYyPd/3E9G2fj5KCbHF9140H4UyJfGk9jlYtKZGPJ1QlzxEZ1Krr4LSMO+P/PjD606wPSW6bd9dAUufmYTTJOpNQW/dw0V6meAr1fm1267f5XCJfjMkzQQmFtSpxDN/IpzJgWcjEsQU/0r+KSdzKf7viqotfK9soDuvni292dNzrLDiwMLWth9+6JVi6TMV5uJPfbJInQgOoaRowPWVquavNxXk/hrur4aBdP229jUe9wX+wk5MGV/uzGbEj59QIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBS9AsVL15G7Z9uI6p/7I7O7aHaCPDAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBALIBpf5Aizfgw2Dge8xJyKELO6kRO0nrBFNyP0viajcRA3jwl9LuV316TjE8eIitmEM0nP4U9AeSkeEPksJBHMak4w+GuE7SkeZ5z6fjpNcZ/1nzJVZMDftjJDNbLeCXO/5bq6ySzYVl53pg5I3auLwEEDcrZKHhRjW0IHxBSqmhYZGajymAaBltHsYS8NP6TfDaT1dXw2EQwgIjxXeoGaQTieX0blGjrJ2y8IRBp1EZ9w2OdHaLEbkD08ndn1m5mQrkX/+F2cSiDZTtrm5Isw1TEJusBbM0j+kEsdwz2VijWIL5K2wjgLMm+tBd5OtibDSoeCNqBW+F/sjtBlMcTq4=\"],\"n\":\"so5viNLtITh86OESO6njyqbtf-iPBEcQNmWohKEKMSDTeeWxJP15mWDUPB-EAKTakudsJ_Rs_MiTiEHOJubJ6BVMYyPd_3E9G2fj5KCbHF9140H4UyJfGk9jlYtKZGPJ1QlzxEZ1Krr4LSMO-P_PjD606wPSW6bd9dAUufmYTTJOpNQW_dw0V6meAr1fm1267f5XCJfjMkzQQmFtSpxDN_IpzJgWcjEsQU_0r-KSdzKf7viqotfK9soDuvni292dNzrLDiwMLWth9-6JVi6TMV5uJPfbJInQgOoaRowPWVquavNxXk_hrur4aBdP229jUe9wX-wk5MGV_uzGbEj59Q\",\"e\":\"AQAB\",\"kid\":\"NEMzQjJDQ0RFN0QyMzlDNjU0MUE1MjM4MjlCOTYwMjc3NUVBOTRERg\",\"x5t\":\"NEMzQjJDQ0RFN0QyMzlDNjU0MUE1MjM4MjlCOTYwMjc3NUVBOTRERg\"}]}"
+    "{\"keys\":[{\"alg\":\"RS256\",\"kty\":\"RSA\",\"use\":\"sig\",\"n\":\"0cBhPmRoHRaWs6NSlmpr3CxcF1bZlhD_1tBMQ026BitWzHVb1rST-_F1ZhPG9y7zyacTvVu-IE8HJwDegylhTgdKPk4c1s1tomomETJkrxeyG77pHl3jR5cP8LpoqHAFtQKHFe_YR0sgTu038jNZPtr4ZB-kSIu5DE_J5dnprRn4Zr1e2euJecpyhmcOVscGQWagkCOgknUNMP7Yc0VlfqW1Qcmv7ri__LhbaDsuqA4vNWLwf3JEg-sV1I7Yq04Uru6ZE6uaXhhbIardVhrGztEGzj4xz5P6yV-XLb19Bj0S8gnPPDtQr8H1J7VR-ftjNumS6mvM4tpGMB8J97Bj_Q\",\"e\":\"AQAB\",\"kid\":\"CoxMMDDYi1nNiiOjrxllh\",\"x5t\":\"lIzVyZbbZ8KRza6mNQeU7l539ls\",\"x5c\":[\"MIIDDTCCAfWgAwIBAgIJA8FWcpkDbdANMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNVBAMTGWRldi0wODVyM3V4ai51cy5hdXRoMC5jb20wHhcNMjIwNTE0MTgyMjI0WhcNMzYwMTIxMTgyMjI0WjAkMSIwIAYDVQQDExlkZXYtMDg1cjN1eGoudXMuYXV0aDAuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0cBhPmRoHRaWs6NSlmpr3CxcF1bZlhD/1tBMQ026BitWzHVb1rST+/F1ZhPG9y7zyacTvVu+IE8HJwDegylhTgdKPk4c1s1tomomETJkrxeyG77pHl3jR5cP8LpoqHAFtQKHFe/YR0sgTu038jNZPtr4ZB+kSIu5DE/J5dnprRn4Zr1e2euJecpyhmcOVscGQWagkCOgknUNMP7Yc0VlfqW1Qcmv7ri//LhbaDsuqA4vNWLwf3JEg+sV1I7Yq04Uru6ZE6uaXhhbIardVhrGztEGzj4xz5P6yV+XLb19Bj0S8gnPPDtQr8H1J7VR+ftjNumS6mvM4tpGMB8J97Bj/QIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSbEZJ6RXCdHCteX+fdPnWPel4WjzAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBADdH+RKN8sqvprj/JjV/vZ2ebDPcKXuSmCp9EvgUHZkrtu4wHS/MXqJ7mxMVqFZHeGnnqC9RHbMv/7dppx8KRuKg9+2MuDAvjt4AjAA8rj0Wsy8+Rlihkp/ypSCFjDnhG+r1XuEcGdHmNuQIQz+afv0RhLNCUQkBCelpPE4vackUsHiH3tiKU6M06wWXK4EUcZff6qjNElHNuL4ckGIHE90j92nWTQlAgMRW3cfANLyn98QQsS3l0RdED6+Svl2iU8kaipiLdgWdDvQtx6VeV2Mjs9T3n2ykVhsA3R66Fh/MkbP+sThQnaK/kMCDIsvxGFk8TySM/C8EXkCnQ49nsVI=\"]},{\"alg\":\"RS256\",\"kty\":\"RSA\",\"use\":\"sig\",\"n\":\"uOJ_xLaSBP-VUQkYyPqiBXc84o1AZcD7a7zBPLP4qrf5EtZat-hWStXNzMINtU4vo18HpHt4JAJP7JQcrAwjBLnzb-Ax-qHHehZR1wO2KbV5eMPDC4sR_tXQ9Wn8G1vQD_AlnQe24rN5KNdUbQQKZ1TrGMNqqau502fmVaooJoMu5DAewsAgJXZo8ue8TgQw43rTioHP1d3NNQ6VFvooxrnL9ugN6pn5C5Ota7ehH58-PNpraWSoo2B3dmDfkCBSg8qXecMJZbBZB0gZzsM1T03uP8-21oEbrg8-GhTgzXlhAulHPd1x9vAWTEQzdeHaox9JlbdWGPAt9Qbir4JFTw\",\"e\":\"AQAB\",\"kid\":\"dml4LTIeQDL1X9hqaYlaX\",\"x5t\":\"RSJCGFlHfJcZqA8XuJc_mwQJ5u0\",\"x5c\":[\"MIIDDTCCAfWgAwIBAgIJNV6RIMmHlxICMA0GCSqGSIb3DQEBCwUAMCQxIjAgBgNVBAMTGWRldi0wODVyM3V4ai51cy5hdXRoMC5jb20wHhcNMjIwNTE0MTgyMjI0WhcNMzYwMTIxMTgyMjI0WjAkMSIwIAYDVQQDExlkZXYtMDg1cjN1eGoudXMuYXV0aDAuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuOJ/xLaSBP+VUQkYyPqiBXc84o1AZcD7a7zBPLP4qrf5EtZat+hWStXNzMINtU4vo18HpHt4JAJP7JQcrAwjBLnzb+Ax+qHHehZR1wO2KbV5eMPDC4sR/tXQ9Wn8G1vQD/AlnQe24rN5KNdUbQQKZ1TrGMNqqau502fmVaooJoMu5DAewsAgJXZo8ue8TgQw43rTioHP1d3NNQ6VFvooxrnL9ugN6pn5C5Ota7ehH58+PNpraWSoo2B3dmDfkCBSg8qXecMJZbBZB0gZzsM1T03uP8+21oEbrg8+GhTgzXlhAulHPd1x9vAWTEQzdeHaox9JlbdWGPAt9Qbir4JFTwIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTl+U2YmCmM7SZ3QG8RELmzTsKJkTAOBgNVHQ8BAf8EBAMCAoQwDQYJKoZIhvcNAQELBQADggEBAC4toPUMWaYHX9f6iczuRZ/K4N65id7IyzEmhFUex9uB/Alga63FZASKDRx3GoYW/6ksC7mrJ9OEsFgOUPfvUreAx8lA2r71JVoIyuiyLCCDgOJ26J60EcKvkZAKjgNRL6Vorjc5c2fYUKdiz12s8LMJmza3hTCO8PTF2uc9NoleO3AOAQzosqPKk5K1PVudJo+6+K9HHmDqDOgpPTLv413KKy8PWXDwSAHH7isih2yyEw4KoA9xqFqJpoOdvN/oaXoNMWn8Mbg2poDV/W5dxxCbgcv2FMS5IdxhkgHld4+993mJq7fFvGkSzquknMr6ft5SKErbBg4VcqGc4lE1x20=\"]}]}"
   end
 
   describe '.verify' do
@@ -16,12 +17,16 @@ describe JsonWebToken do
       allow(Net::HTTP).to receive(:get).and_return(jwks_raw)
     end
 
+    it 'authorizes the request if token is correct' do
+      expect { subject.verify(valid_token) }.not_to raise_error
+    end
+
     it 'raises exception if the token is incorrect' do
       expect { subject.verify('') }.to raise_exception(JWT::DecodeError)
     end
 
     it 'raises exception if the token is expired' do
-      expect { subject.verify(token) }.to raise_exception(JWT::DecodeError)
+      expect { subject.verify(expired_token) }.to raise_exception(JWT::DecodeError)
     end
   end
 end
