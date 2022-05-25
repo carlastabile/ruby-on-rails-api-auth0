@@ -2,8 +2,8 @@ require 'rails_helper'
 require 'json_web_token'
 
 RSpec.describe 'Jokes', type: :request do
-  let(:valid_token){ TokenHelper.read_token("validToken") }
-  let(:expired_token){ TokenHelper.read_token("expiredToken") }
+  let(:valid_token){ ReadHelper.read("validToken") }
+  let(:expired_token){ ReadHelper.read("expiredToken") }
   let(:joke) {
     {
       category: "category",
